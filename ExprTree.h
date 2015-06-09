@@ -121,8 +121,7 @@ void ExprTree<DataType>::showHelper(ExprTreeNode *p, int level) const
 			cout << "\\";
 		cout << endl;
 		showHelper(p->left, level + 1);		// Output left subtree
-	}
-	//Not sure why putting a return statement here screws everything up but it does so I'm omitting it.
+	}	//Not sure why putting a return statement here screws everything up but it does so I'm omitting it.
 }
 
 template <typename DataType>
