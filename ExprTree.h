@@ -49,18 +49,43 @@ private:
 	//Requires: Nothing.
 	//Result: Recursively outputs the tree.
 
+	ExprTreeNode buildHelper(); //Recursive helper for build.
+	//Requires: Valid single-line input.
+	//Result: Recursively creates the tree.
+
 	ExprTreeNode *root; //Pointer to the root node of the tree.
 
-	class ExprTreeNode {
-	public:
-		
-		ExprTreeNode(char, ExprTreeNode *, ExprTreeNode *); //Constructor for the tree nodes, requires all 3 arguments.
-
-		char dataItem; //The value stored in the node.
-
-		ExprTreeNode *left, *right; //Pointers to the child nodes.
-	};
 };
+
+class ExprTreeNode {
+	template<typename DataType>
+	friend class ExprTree<DataType>;
+public:
+
+	~ExprTreeNode(); //Destructor
+
+private:
+		
+	ExprTreeNode(char ch='\0', ExprTreeNode *left=NULL, ExprTreeNode *right=NULL); //Constructor for the tree nodes with default parameters.
+
+	char dataItem; //The value stored in the node.
+
+	ExprTreeNode *left, *right; //Pointers to the child nodes.
+	};
+
+template <typename DataType>
+ExprTree<DataType>::ExprTree()
+{
+	root = NULL;
+}
+
+template <typename DataType>
+void ExprTree<DataType>::build()
+{
+	clear();
+	root = buildHelper();
+	return;
+}
 
 template <typename DataType>
 void ExprTree<DataType>::showStructure() const
@@ -97,5 +122,39 @@ void ExprTree<DataType>::showHelper(ExprTreeNode *p, int level) const
 		cout << endl;
 		showHelper(p->left, level + 1);		// Output left subtree
 	}
-	return;
+	//Not sure why putting a return statement here screws everything up but it does so I'm omitting it.
+}
+
+template <typename DataType>
+ExprTreeNode* ExprTree<DataType>::buildHelper()
+{
+	char ch;
+	do
+		cin.get(ch);
+	while (' ' == ch || '\t' == ch);
+	ExprTreeNode *newNode;
+	newNode = new ExprTreeNode;
+	newNode->dataItem = ch;
+	if ('+' == ch || '-' == ch || '*' == ch || '/' == ch)
+	{
+		newNode->left = buildHelper();
+		newNode->right = buildHelper();
+	}
+	else
+	{
+		newNode->left = NULL;
+		newNode->right = NULL;
+	}
+	return newNode;
+}
+ExprTreeNode::ExprTreeNode(char ch, ExprTreeNode *leftptr, ExprTreeNode *rightptr)
+{
+	dataItem = ch;
+	left = leftptr;
+	right = rightptr;
+}
+ExprTreeNode::~ExprTreeNode()
+{
+	delete left;
+	delete right;
 }
