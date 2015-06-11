@@ -41,6 +41,12 @@ private:
 	ExprTreeNode* buildHelper(); //Recursive helper for build.
 	//Requires: Valid single-line input.
 	//Result: Recursively creates the tree.
+	void clearHelper(ExprTreeNode*); //Recursive helper for clear.
+	//Requires: Non-empty tree.
+	//Result: Recursively deletes the tree.
+	bool isEquivalentHelper(const ExprTreeNode*, const ExprTreeNode*) const; //Recursive helper for isEquivalent.
+	//Requires: 2 nodes, each from different trees.
+	//Returns: 1 if the nodes have identical dataItems as do all their children, 0 otherwise.
 	ExprTreeNode *root; //Pointer to the root node of the tree.
 };
 class ExprTreeNode {
@@ -59,6 +65,12 @@ ExprTree<DataType>::ExprTree()
 	root = NULL;
 }
 template <typename DataType>
+ExprTree<DataType>::~ExprTree()
+{
+	clear();
+	delete root;
+}
+template <typename DataType>
 void ExprTree<DataType>::build()
 {
 	clear();
@@ -70,8 +82,14 @@ void ExprTree<DataType>::clear()
 {
 	if (NULL = root)
 		return;
-	
+	clearHelper(root);
+	root = NULL;
 	return;
+}
+template <typename DataType>
+bool ExprTree<DataType>::isEquivalent(const ExprTree* other) const
+{
+	return isEquivalentHelper(root, other->root);
 }
 template <typename DataType>
 bool ExprTree<DataType>::isEmpty() const
@@ -136,6 +154,35 @@ ExprTreeNode* ExprTree<DataType>::buildHelper()
 		newNode->right = NULL;
 	}
 	return newNode;
+}
+template <typename DataType>
+void ExprTree<DataType>::clearHelper(ExprTreeNode* here)
+{
+	if (NULL != here->left)
+		clearHelper(left);
+	if (NULL != here->right)
+		clearHelper(right);
+	delete here;
+	return;
+}
+template <typename DataType>
+bool ExprTree<DataType>::isEquivalentHelper(const ExprTreeNode* here, const ExprTreeNode* other) const
+{
+	if (here->dataItem != other->dataItem)
+		return 0;
+	if (NULL == here->left && NULL != other->left)
+		return 0;
+	if (NULL != here->left && NULL == other->left)
+		return 0;
+	if (!(isEquivalentHelper(here->left, other->left)))
+		return 0;
+	if (NULL == here->right && NULL != other->right)
+		return 0;
+	if (NULL != here->right && NULL == other->right)
+		return 0;
+	if (!(isEquivalentHelper(here->right, other->right)))
+		return 0;
+	return 1;
 }
 ExprTreeNode::ExprTreeNode(char ch, ExprTreeNode *leftptr, ExprTreeNode *rightptr)
 {
