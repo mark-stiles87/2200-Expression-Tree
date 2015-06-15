@@ -52,10 +52,7 @@ private:
 class ExprTreeNode {
 	template<typename DataType>
 	friend class ExprTree;
-public:
-	~ExprTreeNode(); //Destructor
 private:
-	ExprTreeNode(char ch = '\0', ExprTreeNode *left = NULL, ExprTreeNode *right = NULL); //Constructor for the tree nodes with default parameters.
 	char dataItem; //The value stored in the node.
 	ExprTreeNode *left, *right; //Pointers to the child nodes.
 };
@@ -87,7 +84,7 @@ void ExprTree<DataType>::clear()
 	return;
 }
 template <typename DataType>
-bool ExprTree<DataType>::isEquivalent(const ExprTree* other) const
+bool ExprTree<DataType>::isEquivalent(const ExprTree& other) const
 {
 	return isEquivalentHelper(root, other->root);
 }
@@ -159,9 +156,9 @@ template <typename DataType>
 void ExprTree<DataType>::clearHelper(ExprTreeNode* here)
 {
 	if (NULL != here->left)
-		clearHelper(left);
+		clearHelper(here->left);
 	if (NULL != here->right)
-		clearHelper(right);
+		clearHelper(here->right);
 	delete here;
 	return;
 }
@@ -183,15 +180,4 @@ bool ExprTree<DataType>::isEquivalentHelper(const ExprTreeNode* here, const Expr
 	if (!(isEquivalentHelper(here->right, other->right)))
 		return 0;
 	return 1;
-}
-ExprTreeNode::ExprTreeNode(char ch, ExprTreeNode *leftptr, ExprTreeNode *rightptr)
-{
-	dataItem = ch;
-	left = leftptr;
-	right = rightptr;
-}
-ExprTreeNode::~ExprTreeNode()
-{
-	delete left;
-	delete right;
 }
