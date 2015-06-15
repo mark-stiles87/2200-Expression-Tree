@@ -80,7 +80,7 @@ void ExprTree<DataType>::build()
 template <typename DataType>
 void ExprTree<DataType>::clear()
 {
-	if (NULL = root)
+	if (NULL == root)
 		return;
 	clearHelper(root);
 	root = NULL;
