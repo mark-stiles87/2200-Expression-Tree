@@ -16,7 +16,7 @@ public:
 	void expression() const; //Outputs the tree in infix notation.
 	//Requires: Nothing, will output "NULL" if tree is empty.
 	//Result: The input expression converted to infix notation with parentheses around all but the outermost operation.
-	DataType evaluate() const throw (logic_error); //Evaluates the stored expression.
+	DataType evaluate() const; //Evaluates the stored expression.
 	//Requires: A non-empty tree, will throw an exception if the tree is empty.
 	//Result: The value of the expression, in the same data type as the tree.
 	void clear(); //Erases the tree.
@@ -41,6 +41,12 @@ private:
 	ExprTreeNode* buildHelper(); //Recursive helper for build.
 	//Requires: Valid single-line input.
 	//Result: Recursively creates the tree.
+	DataType evaluateHelper(const ExprTreeNode*) const; //Recursive helper for evaluate.
+	//Requires: A pointer to a node which contains an operator.
+	//Result: Recursively conducts the operations contained in the tree.
+	DataType charConverter(const char) const; //Converts char into number for evaluateHelper to make the code cleaner.
+	//Requires: A character which contains a digit 0-9.
+	//Result: Returns that digit as a DataType.
 	void clearHelper(ExprTreeNode*); //Recursive helper for clear.
 	//Requires: Non-empty tree.
 	//Result: Recursively deletes the tree.
@@ -73,6 +79,11 @@ void ExprTree<DataType>::build()
 	clear();
 	root = buildHelper();
 	return;
+}
+template <typename DataType>
+DataType ExprTree<DataType>::evaluate() const
+{
+	return evaluateHelper(root);
 }
 template <typename DataType>
 void ExprTree<DataType>::clear()
@@ -151,6 +162,62 @@ ExprTreeNode* ExprTree<DataType>::buildHelper()
 		newNode->right = NULL;
 	}
 	return newNode;
+}
+template <typename DataType>
+DataType ExprTree<DataType>::evaluateHelper(const ExprTreeNode* here) const
+{
+	char leftLeafCH = here->left->dataItem;
+	char rightLeafCH = here->right->dataItem;
+	DataType leftLeafDT, rightLeafDT;
+	if ('+' == leftLeafCH || '-' == leftLeafCH || '*' == leftLeafCH || '/' == leftLeafCH)
+		leftLeafDT = evaluateHelper(here->left);
+	else
+		leftLeafDT = charConverter(leftLeafCH);
+	if ('+' == rightLeafCH || '-' == rightLeafCH || '*' == rightLeafCH || '/' == rightLeafCH)
+		rightLeafDT = evaluateHelper(here->right);
+	else
+		rightLeafDT = charConverter(rightLeafCH);
+	switch (here->dataItem)
+	{
+	case '+':
+		return leftLeafDT + rightLeafDT;
+	case '-':
+		return leftLeafDT - rightLeafDT;
+	case '*':
+		return leftLeafDT * rightLeafDT;
+	case '/':
+		if (rightLeafDT)
+			return leftLeafDT / rightLeafDT;
+		else
+			return leftLeafDT;
+	}
+}
+template<typename DataType>
+DataType ExprTree<DataType>::charConverter(const char ch) const
+{
+	switch (ch)
+	{
+	case '1':
+		return 1;
+	case '2':
+		return 2;
+	case '3':
+		return 3;
+	case '4':
+		return 4;
+	case '5':
+		return 5;
+	case '6':
+		return 6;
+	case '7':
+		return 7;
+	case '8':
+		return 8;
+	case '9':
+		return 9;
+	default:
+		return 0;
+	}
 }
 template <typename DataType>
 void ExprTree<DataType>::clearHelper(ExprTreeNode* here)
