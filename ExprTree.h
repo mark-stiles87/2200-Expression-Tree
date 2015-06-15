@@ -139,16 +139,16 @@ ExprTreeNode* ExprTree<DataType>::buildHelper()
 	char ch;
 	do
 		cin.get(ch);
-	while (' ' == ch || '\t' == ch);
+	while (' ' == ch || '\t' == ch); //Reads in the next character until it finds one that isn't whitespace.
 	ExprTreeNode *newNode;
 	newNode = new ExprTreeNode;
-	newNode->dataItem = ch;
-	if ('+' == ch || '-' == ch || '*' == ch || '/' == ch)
+	newNode->dataItem = ch; //Stores the new character as the current node's data.
+	if ('+' == ch || '-' == ch || '*' == ch || '/' == ch) //A node will have children iff it contains an operator.
 	{
 		newNode->left = buildHelper();
 		newNode->right = buildHelper();
 	}
-	else
+	else //If the node contains a value it is a leaf so the pointers should be null.
 	{
 		newNode->left = NULL;
 		newNode->right = NULL;
