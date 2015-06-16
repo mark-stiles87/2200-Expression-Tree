@@ -7,8 +7,8 @@ template <typename DataType>
 class ExprTree {
 public:
 	ExprTree(); //Default constructor, creates an empty tree.
-	ExprTree(const ExprTree&); //Copy constructor, calls the default constructor and assignment operator.
-	ExprTree* operator=(const ExprTree&); //Assignment operator, calls isEquivalent to avoid self-assignment.
+	ExprTree(const ExprTree<DataType>&); //Copy constructor, calls the default constructor and assignment operator.
+	ExprTree<DataType>& operator=(const ExprTree<DataType>&); //Assignment operator, calls isEquivalent to avoid self-assignment.
 	~ExprTree(); //Destructor.
 	void build(); //Calls clear then builds a tree based on a single line of input.
 	//Requires: Console window input consisting of only single-digit numbers and arithmatic operators, separated by whitespace on a single line.
@@ -38,6 +38,9 @@ private:
 	void showHelper(ExprTreeNode*, int) const; //Recursive helper for showStructure.
 	//Requires: Nothing.
 	//Result: Recursively outputs the tree.
+	ExprTreeNode* assignHelper(ExprTreeNode*, const ExprTreeNode*); //Recursive helper for the assignment operator.
+	//Requires: A null Node pointer and a non-null Node pointer from an existing tree.
+	//Result: Recursively deep copies the data and structure of the existing tree.
 	ExprTreeNode* buildHelper(); //Recursive helper for build.
 	//Requires: Valid single-line input.
 	//Result: Recursively creates the tree.
@@ -66,6 +69,21 @@ template <typename DataType>
 ExprTree<DataType>::ExprTree()
 {
 	root = NULL;
+}
+template <typename DataType>
+ExprTree<DataType>::ExprTree(const ExprTree<DataType>& other)
+{
+	root = NULL;
+	*this = other;
+}
+template <typename DataType>
+ExprTree<DataType>& ExprTree<DataType>::operator=(const ExprTree<DataType>& other)
+{
+	if (isEquivalent(other))
+		return *this;
+	clear();
+	root = assignHelper(root, other.root);
+	return *this;
 }
 template <typename DataType>
 ExprTree<DataType>::~ExprTree()
@@ -97,7 +115,14 @@ void ExprTree<DataType>::clear()
 template <typename DataType>
 bool ExprTree<DataType>::isEquivalent(const ExprTree& other) const
 {
-	return isEquivalentHelper(root, other->root);
+	if (NULL == root && NULL == other.root) //The helper cannot handle being given null pointers, handle those cases separately first the case of both trees being empty.
+		return 1;
+	else if (NULL == root && NULL != other.root) //Then the two cases of one empty and one non-empty.
+		return 0;
+	else if (NULL != root && NULL == other.root)
+		return 0;
+	else
+		return isEquivalentHelper(root, other.root);
 }
 template <typename DataType>
 bool ExprTree<DataType>::isEmpty() const
@@ -140,6 +165,19 @@ void ExprTree<DataType>::showHelper(ExprTreeNode *p, int level) const
 		cout << endl;
 		showHelper(p->left, level + 1); // Output left subtree
 	} //Not sure why putting a return statement here screws everything up but it does so I'm omitting it.
+}
+template <typename DataType>
+ExprTreeNode* ExprTree<DataType>::assignHelper(ExprTreeNode *here, const ExprTreeNode* other)
+{
+	here = new ExprTreeNode;
+	here->dataItem = other->dataItem;
+	here->left = NULL;
+	here->right = NULL;
+	if (NULL != other->left) //If the node being copied is not a leaf recurse to copy its left child.
+		here->left = assignHelper(here->left, other->left);
+	if (NULL != other->right) //Likewise for the right child.
+		here->right = assignHelper(here->right, other->right);
+	return here;
 }
 template <typename DataType>
 ExprTreeNode* ExprTree<DataType>::buildHelper()
