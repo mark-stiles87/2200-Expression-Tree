@@ -169,15 +169,15 @@ DataType ExprTree<DataType>::evaluateHelper(const ExprTreeNode* here) const
 	char leftLeafCH = here->left->dataItem;
 	char rightLeafCH = here->right->dataItem;
 	DataType leftLeafDT, rightLeafDT;
-	if ('+' == leftLeafCH || '-' == leftLeafCH || '*' == leftLeafCH || '/' == leftLeafCH)
+	if ('+' == leftLeafCH || '-' == leftLeafCH || '*' == leftLeafCH || '/' == leftLeafCH) //If the left child node contains an operation recurse to find its value.
 		leftLeafDT = evaluateHelper(here->left);
-	else
+	else //Otherwise the left child contains a value so convert it from character to DataType.
 		leftLeafDT = charConverter(leftLeafCH);
-	if ('+' == rightLeafCH || '-' == rightLeafCH || '*' == rightLeafCH || '/' == rightLeafCH)
+	if ('+' == rightLeafCH || '-' == rightLeafCH || '*' == rightLeafCH || '/' == rightLeafCH) //Same for the right child node, recurse if it's an operator.
 		rightLeafDT = evaluateHelper(here->right);
-	else
+	else //Convert it to a DataType if it's not.
 		rightLeafDT = charConverter(rightLeafCH);
-	switch (here->dataItem)
+	switch (here->dataItem) //Carry out the operation stored in this node.
 	{
 	case '+':
 		return leftLeafDT + rightLeafDT;
@@ -186,7 +186,7 @@ DataType ExprTree<DataType>::evaluateHelper(const ExprTreeNode* here) const
 	case '*':
 		return leftLeafDT * rightLeafDT;
 	case '/':
-		if (rightLeafDT)
+		if (rightLeafDT) //Division by 0 guard.
 			return leftLeafDT / rightLeafDT;
 		else
 			return leftLeafDT;
