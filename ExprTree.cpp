@@ -43,7 +43,11 @@ void ExprTree<DataType>::expression() const
 template <typename DataType>
 DataType ExprTree<DataType>::evaluate() const
 {
-	return evaluateHelper(root);
+	char rootItem = root->dataItem;
+	if ('+' == rootItem || '-' == rootItem || '*' == rootItem || '/' == rootItem)
+		return evaluateHelper(root);
+	else
+		return charConverter(rootItem);
 }
 
 template <typename DataType>
