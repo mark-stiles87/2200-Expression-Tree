@@ -47,9 +47,6 @@ public:
 	void expression() const; //Outputs the tree in infix notation.
 	//Requires: Nothing, will output "NULL" if tree is empty.
 	//Result: The input expression converted to infix notation with parentheses around all but the outermost operation.
-	void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const; //Recursively outputs tree in infix from root given as parameter
-	//Requires: highest root (where to start)
-	//Result: Recursively outputs tree in infix notation from root
 	DataType evaluate() const; //Evaluates the stored expression.
 	//Requires: A non-empty tree, will throw an exception if the tree is empty.
 	//Result: The value of the expression, in the same data type as the tree.
@@ -78,6 +75,9 @@ private:
 	ExprTreeNode* buildHelper(); //Recursive helper for build.
 	//Requires: Valid single-line input.
 	//Result: Recursively creates the tree.
+	void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const; //Recursively outputs tree in infix from root given as parameter
+	//Requires: highest root (where to start)
+	//Result: Recursively outputs tree in infix notation from root
 	DataType evaluateHelper(const ExprTreeNode*) const; //Recursive helper for evaluate.
 	//Requires: A pointer to a node which contains an operator.
 	//Result: Recursively conducts the operations contained in the tree.
