@@ -1,3 +1,29 @@
+/*------------------------------------------------------------*\
+		        Expression Tree
+			    06/17/15	
+
+	System Srchitect: Anthony Mauro
+	Data Architect: Bejamin Ciaglo
+	Developer: Mark Stiles
+\*------------------------------------------------------------*/
+/**************************************************************\
+  Dates compiled and results:
+  06/08/15 - Testing build, buildHelper, showStructure, and 
+  	      showHelper:
+ 	- Was able to compile and show correct output.
+ 	
+  06/10/15 - Testing Evaluate, and evaluateHelper:
+  	- First compile, recieved minor syntax error.
+  	- Fixed error, correct output was produced.
+ 
+  06/14/15 - Testing expression:
+  	- First attempt gave wrong output.
+  	- Fixed, recieved correct output.
+  	
+  06/16/15 - Final testing:
+  	- Finished code, tested everything together, all
+  	  outputs were correct.
+\**************************************************************/
 #pragma once
 #include <stdexcept>
 #include <iostream>
