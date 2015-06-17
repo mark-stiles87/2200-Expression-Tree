@@ -145,6 +145,34 @@ ExprTreeNode* ExprTree<DataType>::buildHelper()
 	return newNode;
 }
 
+template<>
+ExprTreeNode* ExprTree<bool>::buildHelper()
+{
+	char ch;
+	do
+		cin.get(ch);
+	while (' ' == ch || '\t' == ch); //Reads in the next character until it finds one that isn't whitespace.
+	ExprTreeNode *newNode;
+	newNode = new ExprTreeNode;
+	newNode->dataItem = ch; //Stores the new character as the current node's data.
+	if ('+' == ch || '*' == ch) //A node will have children iff it contains an operator.
+	{
+		newNode->left = buildHelper();
+		newNode->right = buildHelper();
+	}
+	else if ('-' == ch) //Boolean not only has one child.
+	{
+		newNode->left = NULL;
+		newNode->right = buildHelper();
+	}
+	else //If the node contains a value it is a leaf so the pointers should be null.
+	{
+		newNode->left = NULL;
+		newNode->right = NULL;
+	}
+	return newNode;
+}
+
 template <typename DataType>
 void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const
 {
@@ -200,6 +228,36 @@ DataType ExprTree<DataType>::evaluateHelper(const ExprTreeNode* here) const
 	}
 
 }
+
+template<>
+bool ExprTree<bool>::evaluateHelper(const ExprTreeNode* here) const
+{
+	char leftLeafCH;	
+	bool leftLeafDT, rightLeafDT;
+	if (NULL != here->left)
+	{
+		leftLeafCH = here->left->dataItem;
+		if ('+' == leftLeafCH || '-' == leftLeafCH || '*' == leftLeafCH) //If the left child node contains an operation recurse to find its value.
+			leftLeafDT = evaluateHelper(here->left);
+		else if(NULL != here->left)//Otherwise the left child contains a value so convert it from character to DataType. 
+			leftLeafDT = charConverter(leftLeafCH);
+	}
+	char rightLeafCH = here->right->dataItem;
+	if ('+' == rightLeafCH || '-' == rightLeafCH || '*' == rightLeafCH) //Same for the right child node, recurse if it's an operator.
+		rightLeafDT = evaluateHelper(here->right);
+	else //Convert it to a DataType if it's not. 
+		rightLeafDT = charConverter(rightLeafCH);
+	switch (here->dataItem)
+	{
+	case '+':
+		return leftLeafDT + rightLeafDT;
+	case '*':
+		return leftLeafDT + rightLeafDT;
+	case '-':
+		return !rightLeafDT;
+	}
+}
+
 template<typename DataType>
 DataType ExprTree<DataType>::charConverter(const char ch) const
 {
