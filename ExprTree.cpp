@@ -41,30 +41,6 @@ void ExprTree<DataType>::expression() const
 }
 
 template <typename DataType>
-void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const
-{
-
-	if (p->left != NULL)
-	{
-		if (p != root)
-			cout << '(' << ' '; // outputs left parentheses before leftmost operand in small operation unless root
-
-		expressionHelper(p->left); // traverses left subtree
-		cout << p->dataItem << ' '; // outputs operators
-		expressionHelper(p->right); // traverses right subtree
-
-		if (p != root)
-			cout << ')' << ' '; // outputs right parentheses after rightmost operand in small operation unless root
-	}
-
-	else if (p->left == NULL)
-		cout << p->dataItem << ' '; // outputs operands
-
-	if (p == root)
-		cout << ' ' << endl; // outputs newline when tree traversal is finished
-}
-
-template <typename DataType>
 DataType ExprTree<DataType>::evaluate() const
 {
 	return evaluateHelper(root);
@@ -168,6 +144,31 @@ ExprTreeNode* ExprTree<DataType>::buildHelper()
 	}
 	return newNode;
 }
+
+template <typename DataType>
+void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const
+{
+
+	if (p->left != NULL)
+	{
+		if (p != root)
+			cout << '(' << ' '; // outputs left parentheses before leftmost operand in small operation unless root
+
+		expressionHelper(p->left); // traverses left subtree
+		cout << p->dataItem << ' '; // outputs operators
+		expressionHelper(p->right); // traverses right subtree
+
+		if (p != root)
+			cout << ')' << ' '; // outputs right parentheses after rightmost operand in small operation unless root
+	}
+
+	else if (p->left == NULL)
+		cout << p->dataItem << ' '; // outputs operands
+
+	if (p == root)
+		cout << ' ' << endl; // outputs newline when tree traversal is finished
+}
+
 template <typename DataType>
 DataType ExprTree<DataType>::evaluateHelper(const ExprTreeNode* here) const
 {
