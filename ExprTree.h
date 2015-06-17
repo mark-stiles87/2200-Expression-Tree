@@ -75,7 +75,7 @@ private:
 	ExprTreeNode* buildHelper(); //Recursive helper for build.
 	//Requires: Valid single-line input.
 	//Result: Recursively creates the tree.
-	void ExprTree<DataType>::expressionHelper(ExprTreeNode *p) const; //Recursively outputs tree in infix from root given as parameter
+	void expressionHelper(ExprTreeNode *p) const; //Recursively outputs tree in infix from root given as parameter
 	//Requires: highest root (where to start)
 	//Result: Recursively outputs tree in infix notation from root
 	DataType evaluateHelper(const ExprTreeNode*) const; //Recursive helper for evaluate.
