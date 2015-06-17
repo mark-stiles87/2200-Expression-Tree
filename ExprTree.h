@@ -83,7 +83,9 @@ private:
 	void clearHelper(ExprTreeNode*); //Recursive helper for clear.
 	//Requires: Non-empty tree.
 	//Result: Recursively deletes the tree.
-	ExprTreeNode* commuteHelper(ExprTreeNode*, const ExprTreeNode*);
+	ExprTreeNode* commuteHelper(ExprTreeNode*, const ExprTreeNode*); //Recursive helper for commute.
+	//Requires: a null Node pointer and a non-null Node pointer from an existing tree.
+	//Result: Recursively deep copies the data but reverses the structure of the existing tree.
 	bool isEquivalentHelper(const ExprTreeNode*, const ExprTreeNode*) const; //Recursive helper for isEquivalent.
 	//Requires: 2 nodes, each from different trees.
 	//Returns: 1 if the nodes have identical dataItems as do all their children, 0 otherwise.
