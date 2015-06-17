@@ -162,7 +162,7 @@ void ExprTree <DataType>::commute()
 {
 	ExprTree<DataType> newTree;
 	newTree.root = commuteHelper(newTree.root, root);
-	root = assignHelper(root, newTree.root);
+	*this = newTree;
 	return;
 }
 template <typename DataType>
